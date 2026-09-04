@@ -47,10 +47,21 @@
     });
   }
 
+
+  // Work video data section
   var workVideos = [
-    "https://youtube.com/shorts/YbqJW7BMCfU?si=PXQepedbox9ZTYBk",
-    "https://youtube.com/shorts/neZF2IpPI_U?si=5bvwCN60DrpUHepD",
-    "https://youtube.com/shorts/ajZg2gkSVG8?si=ANHmAWovkgFjVulj"
+    {
+      title: "3D Motion Graphics",
+      url: "https://www.youtube.com/shorts/YbqJW7BMCfU"
+    },
+    {
+      title: "Promotional Typography Video",
+      url: "https://www.youtube.com/shorts/neZF2IpPI_U"
+    },
+    {
+      title: "Talking Head and B-Roll",
+      url: "https://www.youtube.com/shorts/ajZg2gkSVG8"
+    }
   ];
 
   var INITIAL_WORK_COUNT = 6;
@@ -65,7 +76,9 @@
     try {
       var parsedUrl = new URL(url);
 
-      var hostname = parsedUrl.hostname.replace(/^www\./, '').replace(/^m\./, '');
+      var hostname = parsedUrl.hostname
+        .replace(/^www\./, '')
+        .replace(/^m\./, '');
 
       var videoId = '';
 
@@ -99,153 +112,287 @@
     }
   }
 
+
   function padIndex(n) {
     return String(n).padStart(2, '0');
   }
+
 
   function thumbnailSrc(id) {
     return 'https://img.youtube.com/vi/' + id + '/maxresdefault.jpg';
   }
 
+
   function thumbnailFallback(id) {
     return 'https://img.youtube.com/vi/' + id + '/hqdefault.jpg';
   }
+
 
   function pluralLabel(n) {
     return n === 1 ? n + ' PROJECT' : n + ' PROJECTS';
   }
 
-  function prepareVideos(urls) {
+
+  function prepareVideos(videos) {
     var valid = [];
-    urls.forEach(function (url) {
-      var id = getYouTubeVideoId(url);
+
+    videos.forEach(function (item) {
+
+      var id = getYouTubeVideoId(item.url);
+
       if (id) {
-        valid.push({ videoId: id, originalUrl: url });
+        valid.push({
+          videoId: id,
+          originalUrl: item.url,
+          title: item.title
+        });
       } else {
-        console.warn('Invalid YouTube URL:', url);
+        console.warn('Invalid YouTube URL:', item.url);
       }
+
     });
+
     return valid;
   }
 
+
   var validVideos = prepareVideos(workVideos);
   var renderedCount = 0;
+
 
   function detectTouch() {
     var touch = (
       'ontouchstart' in window ||
       (navigator.maxTouchPoints && navigator.maxTouchPoints > 0)
     );
+
     if (touch) {
       $workGrid.addClass('is-touch');
     }
   }
 
+
   var cardObserver = null;
+
   if ('IntersectionObserver' in window) {
     cardObserver = new IntersectionObserver(function (entries) {
+
       entries.forEach(function (entry) {
+
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
           cardObserver.unobserve(entry.target);
         }
+
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -30px 0px'
+    });
   }
 
+
   function watchCard($card) {
+
     $card.addClass('in-view');
+
     if (cardObserver) {
       $card.removeClass('in-view');
       cardObserver.observe($card[0]);
     }
+
   }
 
+
   function buildCard(item) {
+
     var id = item.videoId;
     var originalUrl = item.originalUrl;
     var num = padIndex(item.index);
-    var label = 'Selected Edit ' + num;
+    var label = item.title;
+
     var watchLabel = 'Watch ' + label + ' on YouTube';
+
 
     var $card = $('<div>', {
       class: 'col-12 col-sm-6 col-lg-4'
     });
 
+
     var $inner = $('<a>', {
+
       class: 'work-card',
       href: originalUrl,
       target: '_blank',
       rel: 'noopener noreferrer',
       'aria-label': watchLabel
+
     });
 
+
     $inner.append(
+
       $('<img>', {
+
         class: 'work-thumb',
         src: thumbnailSrc(id),
         alt: label + ' thumbnail',
         loading: 'lazy',
         decoding: 'async',
         onerror: 'this.onerror=null;this.src=' + JSON.stringify(thumbnailFallback(id))
+
       }),
-      $('<div>', { class: 'work-thumb-shade' }),
-      $('<span>', { class: 'work-frame-label' }).text('EDIT ' + num),
-      $('<span>', { class: 'work-card-index' }).text(num),
-      $('<span>', { class: 'work-crop work-crop-tl', 'aria-hidden': 'true' }),
-      $('<span>', { class: 'work-crop work-crop-br', 'aria-hidden': 'true' }),
-      $('<span>', { class: 'work-play', 'aria-hidden': 'true' }).html('<i class="fas fa-play"></i>'),
-      $('<div>', { class: 'work-caption' }).append(
-        $('<span>', { class: 'work-edit-label' }).text('Selected Edit'),
-        $('<span>', { class: 'work-category' }).text(label)
+
+      $('<div>', {
+        class: 'work-thumb-shade'
+      }),
+
+      $('<span>', {
+        class: 'work-frame-label'
+      }).text(label),
+
+      $('<span>', {
+        class: 'work-card-index'
+      }).text(num),
+
+
+      $('<span>', {
+        class: 'work-crop work-crop-tl',
+        'aria-hidden': 'true'
+      }),
+
+
+      $('<span>', {
+        class: 'work-crop work-crop-br',
+        'aria-hidden': 'true'
+      }),
+
+
+      $('<span>', {
+        class: 'work-play',
+        'aria-hidden': 'true'
+      }).html('<i class="fas fa-play"></i>'),
+
+
+      $('<div>', {
+        class: 'work-caption'
+      }).append(
+
+        $('<span>', {
+          class: 'work-edit-label'
+        }).text('Selected Edit'),
+
+
+        $('<span>', {
+          class: 'work-category'
+        }).text(label)
+
       ),
-      $('<span>', { class: 'work-play-hint', 'aria-hidden': 'true' }).text('Watch Edit')
+
+
+      $('<span>', {
+        class: 'work-play-hint',
+        'aria-hidden': 'true'
+      }).text('Watch Edit')
+
     );
 
+
     $card.append($inner);
+
     return $card;
+
   }
+
 
   function renderRange(start, count) {
-    for (var i = start; i < start + count && i < validVideos.length; i++) {
+
+    for (
+      var i = start;
+      i < start + count && i < validVideos.length;
+      i++
+    ) {
+
       var item = {
+
         videoId: validVideos[i].videoId,
         originalUrl: validVideos[i].originalUrl,
+        title: validVideos[i].title,
         index: i + 1
+
       };
+
+
       var $card = buildCard(item);
+
       $workGrid.append($card);
+
       watchCard($card.find('.work-card'));
+
     }
+
   }
+
 
   function updateWorkControls() {
+
     $workCount.text(pluralLabel(validVideos.length));
 
+
     var remaining = validVideos.length - renderedCount;
+
+
     if (validVideos.length > INITIAL_WORK_COUNT && remaining > 0) {
+
       $workLoadMoreWrap.addClass('visible');
+
     } else {
+
       $workLoadMoreWrap.removeClass('visible');
+
     }
+
   }
+
 
   $workLoadMore.on('click', function () {
+
     renderRange(renderedCount, WORK_LOAD_MORE_COUNT);
-    renderedCount = Math.min(renderedCount + WORK_LOAD_MORE_COUNT, validVideos.length);
+
+    renderedCount = Math.min(
+      renderedCount + WORK_LOAD_MORE_COUNT,
+      validVideos.length
+    );
+
     updateWorkControls();
+
   });
 
+
   function initWork() {
+
     detectTouch();
 
-    var initialCount = Math.min(INITIAL_WORK_COUNT, validVideos.length);
+
+    var initialCount = Math.min(
+      INITIAL_WORK_COUNT,
+      validVideos.length
+    );
+
+
     renderRange(0, initialCount);
+
+
     renderedCount = initialCount;
 
+
     updateWorkControls();
+
   }
 
+
   initWork();
+
 
 })(jQuery);
