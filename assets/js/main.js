@@ -61,6 +61,15 @@
     {
       title: "Talking Head and B-Roll",
       url: "https://www.youtube.com/shorts/ajZg2gkSVG8"
+    },
+    {
+      title: "Film Commentary | Cinema History Explanation | Client Project Short Sample",
+      url: "https://youtu.be/17UfyQDK28w"
+    },
+
+    {
+      title: "Brand Marketing Storytelling | Business Explainer",
+      url: "https://youtube.com/shorts/6pi1T-I6Qw8"
     }
   ];
 
