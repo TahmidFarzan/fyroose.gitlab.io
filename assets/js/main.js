@@ -70,6 +70,10 @@
     {
       title: "Brand Marketing Storytelling | Business Explainer",
       url: "https://youtube.com/shorts/6pi1T-I6Qw8"
+    },
+    {
+      title: "Talking-Head Video | Captions & Dynamic Cuts",
+      url: "https://youtube.com/shorts/52JpnoLun0A"
     }
   ];
 
