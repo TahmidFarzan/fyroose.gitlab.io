@@ -51,6 +51,10 @@
   // Work video data section
   var workVideos = [
     {
+      title: "Talking-Head Video | Captions & Dynamic Cuts",
+      url: "https://youtube.com/shorts/52JpnoLun0A"
+    },
+    {
       title: "3D Motion Graphics",
       url: "https://www.youtube.com/shorts/YbqJW7BMCfU"
     },
@@ -66,14 +70,9 @@
       title: "Film Commentary | Cinema History Explanation | Client Project Short Sample",
       url: "https://youtu.be/17UfyQDK28w"
     },
-
     {
       title: "Brand Marketing Storytelling | Business Explainer",
       url: "https://youtube.com/shorts/6pi1T-I6Qw8"
-    },
-    {
-      title: "Talking-Head Video | Captions & Dynamic Cuts",
-      url: "https://youtube.com/shorts/52JpnoLun0A"
     }
   ];
 
